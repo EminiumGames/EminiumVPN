@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.env
+.DS_Store
+.vscode/
+**/pnpm-debug.log
+npm-debug.log*
