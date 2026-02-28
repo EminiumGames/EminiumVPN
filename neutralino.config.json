@@ -1,7 +1,8 @@
 {
   "applicationId": "com.fox3000foxy.vpn-gui",
   "defaultMode": "window",
-  "url": "http://localhost:5173",
+  "url": "/index.html",
+  "documentRoot": "/dist/",
   "enableServer": true,
   "enableNativeAPI": true,
   "port": 0,
@@ -21,17 +22,16 @@
     "title": "VPN GUI",
     "width": 800,
     "height": 600,
-    "resizable": true,
-    "enableDevTools": true
+    "resizable": true
   },
   "modes": {
     "window": {
       "title": "FoxyProxies by Fox3000foxy",
-      "width": 800,
-      "height": 500,
+      "width": 1200,
+      "height": 800,
       "minWidth": 400,
       "minHeight": 200,
-      "icon": "/resources/icons/appIcon.png",
+      "icon": "dist/icons/appIcon.png",
       "center": true,
       "fullScreen": false,
       "alwaysOnTop": false,
@@ -51,7 +51,7 @@
       ]
     },
     "cloud": {
-      "url": "/resources/#cloud",
+      "url": "/dist/#cloud",
       "nativeAllowList": [
         "app.*"
       ]
@@ -68,6 +68,28 @@
   },
   "platform": "windows",
   "cli": {
-    "binaryName": "neutralino"
+    "binaryName": "foxyproxies",
+    "resourcesPath": "/dist/",
+    "extensionsPath": "/extensions/",
+    "clientLibrary": "/dist/js/neutralino.js",
+    "binaryVersion": "6.5.0",
+    "clientVersion": "6.5.0"
+  },
+  "clientLib": "neutralino.js",
+  "dist": "dist",
+  "build": {
+    "outputDir": "build",
+    "files": [
+      "**/*"
+    ],
+    "ignore": [
+      "node_modules",
+      "src",
+      "public",
+      "tor-expert-bundle",
+      ".git",
+      ".vscode",
+      "neutralino.config.json"
+    ]
   }
 }
