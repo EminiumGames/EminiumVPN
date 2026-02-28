@@ -37,10 +37,15 @@ async function onTrayMenuItemClicked(event) {
                 `Neutralinojs server: 1`);
             break;
         case "QUIT":
-            // Exit the application
-            Neutralino.os.execCommand('taskkill /IM tor.exe /F');
-            // Désactiver le proxy
-            Neutralino.os.execCommand('powershell -ExecutionPolicy Bypass -File proxy.ps1 -Disable');
+            try {
+                // Exit the application
+                Neutralino.os.execCommand('taskkill /IM tor.exe /F');
+                // Désactiver le proxy
+                Neutralino.os.execCommand('powershell -ExecutionPolicy Bypass -File proxy.ps1 -Disable');
+            }
+            catch (e) {
+
+            }
             Neutralino.app.exit();
             break;
     }
