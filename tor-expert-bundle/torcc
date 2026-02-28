@@ -1,0 +1,11 @@
+ExitNodes {jp}
+StrictNodes 1
+
+GeoIPFile .\geoip
+GeoIPv6File .\geoip6
+
+UseMicrodescriptors 1
+ClientUseIPv6 0
+
+CircuitBuildTimeout 20
+LearnCircuitBuildTimeout 0

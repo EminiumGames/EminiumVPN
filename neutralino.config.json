@@ -1,0 +1,20 @@
+{
+  "applicationId": "com.example.vpn-gui",
+  "defaultMode": "window",
+  "url": "./index.html",
+  "enableServer": true,
+  "server": {
+    "port": 3000,
+    "enableCORS": true
+  },
+  "window": {
+    "title": "VPN GUI",
+    "width": 800,
+    "height": 600,
+    "resizable": true
+  },
+  "platform": "windows",
+  "cli": {
+    "binaryName": "neutralino"
+  }
+}
