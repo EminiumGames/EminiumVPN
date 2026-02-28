@@ -8,81 +8,23 @@ import SecurityIndicator from './components/SecurityIndicator';
 import TorButton from './components/TorButton';
 import TorProgress from './components/TorProgress';
 import TorRestartButton from './components/TorRestartButton';
+import { useTor } from './hooks/useTor';
 import { fetchCountries } from './libs/countriesApi';
+import { getIp } from './libs/utils';
 import { Country } from './types/Country';
-
-function treatPercentages(log: string): { percent: number; message: string } | null {
-  // If the log doesn't have a percentage, return null
-  if (!/\d{1,3}%/.test(log)) {
-    return null;
-  }
-
-  // Find the last percentage
-  const percentageRegex = /(\d{1,3})%/g;
-  const percentages = [...log.matchAll(percentageRegex)];
-  if (percentages.length === 0) return null;
-  const lastPercentage = percentages[percentages.length - 1][0];
-
-  // Get the part after the rightmost colon
-  const lastColonIdx = log.lastIndexOf(':');
-  if (lastColonIdx === -1) return { percent: parseInt(lastPercentage), message: '' };
-
-  const afterColon = log.slice(lastColonIdx + 1).trim();
-
-  // Return the part after the colon + the last percentage
-  return {
-    percent: parseInt(lastPercentage),
-    message: afterColon,
-  };
-}
-
-async function getIp() {
-  try {
-    const res = await fetch('http://ip-api.com/json');
-    const data = await res.json();
-    return data.query || null;
-  } catch (err) {
-    console.error('Error while fetching IP:', err);
-    return null;
-  }
-}
 
 function App() {
   const [countries, setCountries] = useState<Country[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [logs, setLogs] = useState<string[]>([]);
-  const [torProcessId, setTorProcessId] = useState<number | null>(null);
-  const [torRunning, setTorRunning] = useState(false);
-  const [torProgress, setTorProgress] = useState(0);
-  const [lastTorLog, setLastTorLog] = useState('');
-  const [ip, setIp] = useState<string | null>(null);
-  const [ipLoading, setIpLoading] = useState(false);
-  const [ipError, setIpError] = useState<string | null>(null);
   const [initialIpFetched, setInitialIpFetched] = useState<string | null>(null);
   const [restarting, setRestarting] = useState(false);
+
+  const { torProcessId, torRunning, torProgress, lastTorLog, logs, ip, ipLoading, ipError, error, startTor, stopTor, setError, setIp, setIpError, setIpLoading, setTorRunning, setTorProcessId, setTorProgress, setLastTorLog, setLogs } = useTor(initialIpFetched);
 
   // Kill Tor process at startup
   useEffect(() => {
     async function killTorOnLoad() {
       if (Neutralino && Neutralino.os) {
-        // try {
-        //   const processes = await Neutralino.os.getSpawnedProcesses();
-        //   for (const proc of processes) {
-        //     // if (proc.id && proc.id !== 0) {
-        //       // await Neutralino.os.updateSpawnedProcess(proc.id, '^C'); // Sends Ctrl+C for a clean termination
-
-        //       console.log(`Tor process with PID ${proc.pid} killed on load.`);
-        //     // }
-        //   }
-        //   setTorProcessId(null);
-        //   setTorRunning(false);
-
-        //   // setLogs(prev => [...prev, 'All Tor processes stopped on load.']);
-        // } catch (err) {
-        //   console.error('Error while killing Tor processes on load:', err);
-        //   // setLogs(prev => [...prev, 'Error while killing Tor processes on load.']);
-        // }
         await Neutralino.os.execCommand('powershell -ExecutionPolicy Bypass -File proxy.ps1 -Disable');
         await Neutralino.os.execCommand('taskkill /IM tor.exe /F');
       }
@@ -96,8 +38,8 @@ function App() {
         window.NL_ARGS = [];
         Neutralino.init();
       } catch (err) {
-        console.error("Error during Neutralino initialization:", err);
-        setError("Error during Neutralino initialization. Make sure to launch the app via Neutralino.\n" + err);
+        console.error('Error during Neutralino initialization:', err);
+        setError('Error during Neutralino initialization. Make sure to launch the app via Neutralino.\n' + err);
         setLoading(false);
         return;
       }
@@ -130,76 +72,9 @@ function App() {
 
   async function handleTorRestart() {
     console.log('Restarting Tor with the new country selection...');
-    if(!torRunning) return;
+    if (!torRunning) return;
     await stopTor();
     await startTor();
-  }
-
-  async function startTor() {
-    console.log('Starting Tor with the current country selection... Please wait...');
-    // Start Tor
-    setLogs([]);
-    try {
-      setTorRunning(true);
-      setTorProgress(0);
-      setLastTorLog('Starting');
-      const process = await Neutralino.os.spawnProcess('tor-expert-bundle\\tor.exe -f tor-expert-bundle\\torcc --ExitNodes {' + localStorage.getItem('selectedCountry') + '}');
-      setTorProcessId(process.id);
-      Neutralino.events.on('spawnedProcess', async (evt: { detail: { id: any; action: any; data: any } }) => {
-        if (process.id === evt.detail.id) {
-          switch (evt.detail.action) {
-            case 'stdOut':
-              console.log(`Tor: ${evt.detail.data}`);
-              const treated = treatPercentages(evt.detail.data);
-              if (treated) {
-                if (treated.percent === 100) {
-                  await Neutralino.os.execCommand('powershell -ExecutionPolicy Bypass -File proxy.ps1 -Enable');
-                  // Fetch IP after proxy activation
-                  setIpLoading(true);
-                  const newIp = await getIp();
-                  if (newIp) {
-                    setIp(newIp);
-                    setIpError(null);
-                  } else {
-                    setIpError('Unable to fetch your IP after Tor activation');
-                  }
-                  setIpLoading(false);
-                }
-                setTorProgress(treated.percent);
-                setLastTorLog(treated.message);
-              }
-              break;
-            case 'stdErr':
-              setLogs(prev => [...prev, `Error: ${evt.detail.data}`]);
-              break;
-            case 'exit':
-              setTorRunning(false);
-              setTorProcessId(null);
-              setIp(initialIpFetched); // Revert to initial IP
-              setIpError(null);
-              break;
-          }
-        }
-      });
-    } catch (error: Error | any) {
-      setError(`Failed to start Tor: ${error.message}`);
-    }
-  }
-
-  async function stopTor() {
-    // Stop Tor
-    try {
-      await Neutralino.os.execCommand('taskkill /IM tor.exe /F');
-      // Disable proxy
-      await Neutralino.os.execCommand('powershell -ExecutionPolicy Bypass -File proxy.ps1 -Disable');
-      setTorRunning(false);
-      setTorProcessId(null);
-      setIp(initialIpFetched); // Revert to initial IP
-      setIpError(null);
-    } catch (error: Error | any) {
-      setError(`Failed to stop Tor: ${error.message}`);
-      console.error('Error while stopping Tor:', error);
-    }
   }
 
   async function handleTorButton() {
@@ -223,18 +98,9 @@ function App() {
         {error && <p className='text-red-500'>{error}</p>}
         {!loading && !error && <CountryList onRestart={handleTorRestart} countries={countries} />}
         <TorProgress torRunning={torRunning} torProgress={torProgress} lastTorLog={lastTorLog} />
-        <div className="flex flex-row items-center w-full justify-center gap-4">
-          <TorButton
-            torRunning={torRunning}
-            torProgress={torProgress}
-            handleTorButton={handleTorButton}
-            className="h-12 w-full"
-          />
-          <TorRestartButton
-            onRestart={handleTorRestart}
-            disabled={loading || !!error || !torRunning}
-            className="h-12"
-          />
+        <div className='flex flex-row items-center w-full justify-center gap-4'>
+          <TorButton torRunning={torRunning} torProgress={torProgress} handleTorButton={handleTorButton} className='h-12 w-full' />
+          <TorRestartButton onRestart={handleTorRestart} disabled={loading || !!error || !torRunning} className='h-12' />
         </div>
         <Logs logs={logs} />
       </div>
