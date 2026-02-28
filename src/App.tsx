@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { nlPort, nlToken } from '../.tmp/auth_info.json';
+// import { nlPort, nlToken } from '../.tmp/auth_info.json';
 import CountryList from './components/CountryList';
 import Footer from './components/Footer';
 import Header from './components/Header';
@@ -92,8 +92,8 @@ function App() {
 
     if (Neutralino) {
       try {
-        window.NL_PORT = nlPort;
-        window.NL_TOKEN = nlToken;
+        // window.NL_PORT = nlPort;
+        // window.NL_TOKEN = nlToken;
         window.NL_ARGS = [];
         Neutralino.init();
       } catch (err) {
