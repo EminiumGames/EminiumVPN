@@ -24,7 +24,6 @@
 - [✨ About FoxyProxies](#-about-FoxyProxies)
 - [Features](#features)
 - [How it works](#how-it-works)
-<!-- - [Screenshots](#screenshots) -->
 - [Getting Started](#getting-started)
 - [Configuration](#configuration)
 - [Project Structure](#project-structure)
@@ -71,23 +70,13 @@ User Action
 2. **Neutralino backend** executes system commands/scripts (e.g., launches Tor, changes proxy settings).
 3. **Status and logs** are streamed back to the UI in real time.
 
-> **NOTE**
+> [!NOTE]
 > FoxyProxies does **not** use Electron, making it much lighter and faster to launch.
 
-> **WARNING**
+> [!WARNING]
 > Make sure you trust the Tor binaries and scripts included in `tor-expert-bundle/` before running them.
 
-> **CAUTION**
-> Some features (like proxy or Tor control) may require administrator rights or special firewall permissions on your OS.
-
 ---
-
-<!-- ## Screenshots
-
-> *(Add your application screenshots here)*
-
---- -->
-
 
 ## Getting Started
 
