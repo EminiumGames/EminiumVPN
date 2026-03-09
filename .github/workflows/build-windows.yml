@@ -38,13 +38,13 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: eminiumvpn-windows
-        path: dist/EminiumVPN-win-x64/
+        path: build/
         retention-days: 30
         
     - name: Create Release Asset
       if: github.event_name == 'release'
       run: |
-        Compress-Archive -Path "dist/EminiumVPN-win-x64/*" -DestinationPath "EminiumVPN-win-x64.zip"
+        Compress-Archive -Path "build/*" -DestinationPath "EminiumVPN-win-x64.zip"
         
     - name: Upload Release Asset
       if: github.event_name == 'release'
