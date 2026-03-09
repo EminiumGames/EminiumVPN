@@ -13,7 +13,7 @@ const TorButton = ({
   torProgress,
   handleTorButton,
 }: TorButtonProps) => {
-  const [text, setText] = useState("Start FoxyProxies");
+  const [text, setText] = useState("Start EminiumVPN");
   const disabled = torRunning && torProgress < 100;
 
   useEffect(() => {
@@ -21,10 +21,10 @@ const TorButton = ({
       if (torProgress < 100) {
         setText("Starting...");
       } else {
-        setText("Stop FoxyProxies");
+        setText("Stop EminiumVPN");
       }
     } else {
-      setText("Start FoxyProxies");
+      setText("Start EminiumVPN");
     }
   }, [torRunning, torProgress]);
   return (

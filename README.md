@@ -2,7 +2,7 @@
 
 <div align="center">
 
-<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,11,20&height=180&section=header&text=FoxyProxies&fontSize=42&fontColor=fff&animation=twinkling&fontAlignY=32&desc=Neutralino%20%2B%20React%20%2B%20Vite%20Desktop%20App&descSize=18&descAlignY=52" />
+<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,11,20&height=180&section=header&text=EminiumVPN&fontSize=42&fontColor=fff&animation=twinkling&fontAlignY=32&desc=Neutralino%20%2B%20React%20%2B%20Vite%20Desktop%20App&descSize=18&descAlignY=52" />
 
 <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=24&pause=1000&color=8B5CF6&center=true&vCenter=true&width=500&lines=VPN+GUI+for+Tor+and+Proxy;Cross-platform+Desktop+App;Modern+UI+with+React+%2B+Tailwind;Neutralino.js+%2B+Vite+Template" alt="Typing SVG" />
 
@@ -10,7 +10,7 @@
 
 ---
 
-# FoxyProxies
+# EminiumVPN
 
 > **A modern, cross-platform desktop GUI for Tor and proxy management, built with Neutralino.js, React, TypeScript, and Vite.**
 
@@ -21,7 +21,7 @@
 
 # Table of Contents
 
-- [✨ About FoxyProxies](#-about-FoxyProxies)
+- [✨ About EminiumVPN](#-about-EminiumVPN)
 - [Features](#features)
 - [How it works](#how-it-works)
 - [Getting Started](#getting-started)
@@ -34,9 +34,9 @@
 ---
 
 
-## ✨ About FoxyProxies
+## ✨ About EminiumVPN
 
-**FoxyProxies** is a lightweight, cross-platform desktop application to control Tor, manage proxies, and visualize connection status. Built with Neutralino.js, React, TypeScript, and Vite.
+**EminiumVPN** is a lightweight, cross-platform desktop application to control Tor, manage proxies, and visualize connection status. Built with Neutralino.js, React, TypeScript, and Vite.
 
 > Sleek, fast, and multiplatform — without Electron.
 
@@ -61,7 +61,7 @@
 User Action
    │
    ▼
-[FoxyProxies React UI] ──► [Neutralino Backend] ──► [Tor Process / Proxy Scripts]
+[EminiumVPN React UI] ──► [Neutralino Backend] ──► [Tor Process / Proxy Scripts]
    │
    └─► [Live Status, Logs, Security Indicator]
 ```
@@ -71,7 +71,7 @@ User Action
 3. **Status and logs** are streamed back to the UI in real time.
 
 > [!NOTE]
-> FoxyProxies does **not** use Electron, making it much lighter and faster to launch.
+> EminiumVPN does **not** use Electron, making it much lighter and faster to launch.
 
 > [!WARNING]
 > Make sure you trust the Tor binaries and scripts included in `tor-expert-bundle/` before running them.

@@ -6,7 +6,7 @@
 function setTray() {
     // Define tray menu items
     let tray = {
-        title: "FoxyProxies",
+        title: "EminiumVPN",
         icon: "/resources/icons/trayIcon.png",
         menuItems: [
             { id: "SHOW", text: "Show" },

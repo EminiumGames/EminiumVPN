@@ -19,14 +19,14 @@
     "writeToLogFile": true
   },
   "window": {
-    "title": "VPN GUI",
+    "title": "EminiumVPN by Eminium Games",
     "width": 800,
     "height": 600,
     "resizable": true
   },
   "modes": {
     "window": {
-      "title": "FoxyProxies by Fox3000foxy",
+      "title": "EminiumVPN by Eminium Games",
       "width": 1200,
       "height": 800,
       "minWidth": 400,
@@ -68,7 +68,7 @@
   },
   "platform": "windows",
   "cli": {
-    "binaryName": "foxyproxies2",
+    "binaryName": "eminiumvpn",
     "resourcesPath": "/dist/",
     "extensionsPath": "/extensions/",
     "clientLibrary": "/dist/js/neutralino.js",
