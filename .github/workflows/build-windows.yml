@@ -1,0 +1,58 @@
+name: Build Windows Application
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  release:
+    types: [ published ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Install Neutralino CLI
+      run: npm install -g @neutralinojs/neu
+      
+    - name: Build React app
+      run: npm run build
+      
+    - name: Build Windows application
+      run: neu build
+      
+    - name: Upload Windows artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: eminiumvpn-windows
+        path: dist/EminiumVPN-win-x64/
+        retention-days: 30
+        
+    - name: Create Release Asset
+      if: github.event_name == 'release'
+      run: |
+        Compress-Archive -Path "dist/EminiumVPN-win-x64/*" -DestinationPath "EminiumVPN-win-x64.zip"
+        
+    - name: Upload Release Asset
+      if: github.event_name == 'release'
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: ./EminiumVPN-win-x64.zip
+        asset_name: EminiumVPN-win-x64.zip
+        asset_content_type: application/zip
